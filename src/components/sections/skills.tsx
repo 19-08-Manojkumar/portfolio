@@ -53,7 +53,7 @@ export default function Skills() {
 
   return (
     <section id="stack" ref={sectionRef} className="relative isolate px-6 py-32">
-      <ParallaxTexture src="/accents/blueprint.avif" opacity={0.4} targetRef={sectionRef} />
+      <ParallaxTexture src="/accents/blueprint.avif" opacity={0.90} targetRef={sectionRef} />
       <div className="mx-auto max-w-6xl">
         <SectionHeading eyebrow="Tech Stack" title="Tools I reach for when it matters." icon={Layers} />
 

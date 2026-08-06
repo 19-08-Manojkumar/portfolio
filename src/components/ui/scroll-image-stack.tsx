@@ -18,16 +18,16 @@ export default function ScrollImageStack({
 }) {
   const stackRef = useRef<HTMLDivElement>(null);
   const imgRefs = useRef<HTMLDivElement[]>([]);
-  imgRefs.current = [];
 
   useEffect(() => {
     const trigger = rowRef.current;
     const stack = stackRef.current;
     if (!trigger || !stack || images.length < 2) return;
+    const imageElements = imgRefs.current.slice(0, images.length);
 
     const ctx = gsap.context(() => {
-      gsap.set(imgRefs.current, { opacity: 0, rotateY: 18, scale: 0.94 });
-      gsap.set(imgRefs.current[0], { opacity: 1, rotateY: 0, scale: 1 });
+      gsap.set(imageElements, { opacity: 0, rotateY: 18, scale: 0.94 });
+      gsap.set(imageElements[0], { opacity: 1, rotateY: 0, scale: 1 });
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -38,9 +38,9 @@ export default function ScrollImageStack({
         },
       });
 
-      imgRefs.current.forEach((el, i) => {
+      imageElements.forEach((el, i) => {
         if (i === 0) return;
-        const prev = imgRefs.current[i - 1];
+        const prev = imageElements[i - 1];
         tl.to(prev, { opacity: 0, rotateY: -18, scale: 0.94, duration: 1, ease: "power1.inOut" }, i - 1)
           .to(el, { opacity: 1, rotateY: 0, scale: 1, duration: 1, ease: "power1.inOut" }, i - 1);
       });

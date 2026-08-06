@@ -54,7 +54,7 @@ export default function Contact() {
 
   return (
     <section id="contact" ref={ref} className="relative isolate overflow-hidden px-6 py-32">
-      <ParallaxTexture src="/accents/fiber-optic.avif" opacity={0.5} targetRef={ref} />
+      <ParallaxTexture src="/accents/fiber-optic.avif" opacity={0.8} targetRef={ref} />
       <div
         className="contact-glow pointer-events-none absolute left-1/2 top-1/2 h-[36rem] w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-25 blur-[120px]"
         style={{ background: "radial-gradient(circle, var(--color-accent) 0%, transparent 70%)" }}

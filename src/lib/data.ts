@@ -20,6 +20,17 @@ export const profile = {
     "Full Stack Developer with 2+ years of experience building scalable web applications using React.js and Node.js. Experienced in Next.js (SSR) and NestJS for structured backend architecture. Strong expertise in REST APIs, MongoDB indexing, TypeScript, authentication (JWT/RBAC), and performance optimization.",
 };
 
+export const stackLogos = [
+  { name: "React", src: "/stack/react.svg" },
+  { name: "Next.js", src: "/stack/nextjs.svg" },
+  { name: "TypeScript", src: "/stack/typescript.svg" },
+  { name: "Node.js", src: "/stack/nodejs.svg" },
+  { name: "NestJS", src: "/stack/nestjs.svg" },
+  { name: "MongoDB", src: "/stack/mongodb.svg" },
+  { name: "AWS", src: "/stack/aws.svg" },
+  { name: "Git", src: "/stack/git.svg" },
+];
+
 export const stats = [
   { label: "Years Experience", value: 2, suffix: "+", icon: "calendar" },
   { label: "Major Projects Shipped", value: 4, suffix: "", icon: "rocket" },

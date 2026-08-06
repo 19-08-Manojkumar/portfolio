@@ -86,7 +86,7 @@ export default function Experience() {
 
   return (
     <section id="experience" ref={sectionRef} className="relative isolate">
-      <ParallaxTexture src="/accents/code-texture.avif" opacity={0.4} targetRef={sectionRef} />
+      <ParallaxTexture src="/accents/code-texture.avif" opacity={0.9} targetRef={sectionRef} />
       <div className="px-6 pt-32">
         <div className="mx-auto max-w-6xl">
           <SectionHeading eyebrow="Experience" title={experience.company} icon={Briefcase} />

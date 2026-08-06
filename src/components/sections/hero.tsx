@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { FolderGit2, Download, Sparkles } from "lucide-react";
 import { profile } from "@/lib/data";
 import { PRELOADER_DONE_EVENT } from "@/components/layout/preloader";
 import ParticleField from "@/components/layout/particle-field";
 import HeroBackground from "@/components/layout/hero-background";
+
+const HeroScene = dynamic(() => import("@/components/hero3d/HeroScene"), {
+  ssr: false,
+});
 
 const CODE_SNIPPETS = [
   "const app = express();",
@@ -38,9 +43,11 @@ function useTypewriter(words: string[]) {
       return () => clearTimeout(t);
     }
     if (deleting && text === "") {
-      setDeleting(false);
-      setWordIndex((i) => i + 1);
-      return;
+      const t = setTimeout(() => {
+        setDeleting(false);
+        setWordIndex((i) => i + 1);
+      }, speed);
+      return () => clearTimeout(t);
     }
 
     const t = setTimeout(() => {
@@ -120,6 +127,7 @@ export default function Hero() {
     >
       <HeroBackground />
       <ParticleField />
+      <HeroScene />
 
       <div className="pointer-events-none absolute inset-0 -z-10 select-none opacity-[0.14]">
         {CODE_SNIPPETS.map((snippet, i) => (

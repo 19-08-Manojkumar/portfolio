@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -148,7 +148,7 @@ export default function About() {
 
   return (
     <section id="about" ref={sectionRef} className="relative isolate px-6 py-32">
-      <ParallaxTexture src="/accents/glass-grain.avif" opacity={0.35} targetRef={sectionRef} />
+      <ParallaxTexture src="/accents/glass-grain.avif" opacity={0.85} targetRef={sectionRef} />
       <div className="mx-auto max-w-6xl">
         <SectionHeading eyebrow="About" title="A developer who reads the whole ticket." icon={User} />
 
@@ -223,27 +223,51 @@ export default function About() {
 
 function AboutPortrait() {
   const tiltRef = useTilt<HTMLDivElement>(6);
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const [isCentered, setIsCentered] = useState(false);
   const orbitSkills = ["React", "Node.js", "NestJS", "MongoDB"];
 
+  useEffect(() => {
+    const portrait = portraitRef.current;
+    if (!portrait) return;
+
+    const trigger = ScrollTrigger.create({
+      trigger: portrait,
+      start: "center 70%",
+      end: "center 30%",
+      onToggle: (self) => setIsCentered(self.isActive),
+    });
+
+    return () => trigger.kill();
+  }, []);
+
   return (
-    <div className="about-portrait relative mx-auto w-full max-w-xs" style={{ perspective: 900 }}>
+    <div
+      ref={portraitRef}
+      className="about-portrait group relative mx-auto w-full max-w-xs"
+      style={{ perspective: 900 }}
+    >
+      <div
+        className={`pointer-events-none absolute -inset-5 rounded-[2.5rem] blur-2xl transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-60 ${
+          isCentered ? "scale-105 opacity-60" : "scale-95 opacity-0"
+        }`}
+        style={{ background: "radial-gradient(circle, var(--color-accent) 0%, transparent 70%)" }}
+      />
       <div
         ref={tiltRef}
         data-cursor-hover
-        className="glass group relative aspect-square w-full overflow-hidden rounded-[2rem] p-1"
+        className="glass relative aspect-square w-full overflow-hidden rounded-[2rem] p-1"
         style={{ transformStyle: "preserve-3d" }}
       >
-        <div
-          className="absolute -inset-6 -z-10 rounded-[2.5rem] opacity-40 blur-2xl"
-          style={{ background: "radial-gradient(circle, var(--color-accent) 0%, transparent 70%)" }}
-        />
         <div className="relative h-full w-full overflow-hidden rounded-[1.75rem] bg-surface-2">
           <Image
             src="/mypic.avif"
             alt={profile.name}
             fill
             sizes="(max-width: 768px) 60vw, 320px"
-            className="object-cover grayscale contrast-105 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-105"
+            className={`object-cover contrast-105 transition-all duration-700 ease-out group-hover:scale-105 group-hover:grayscale-0 ${
+              isCentered ? "scale-105 grayscale-0" : "scale-100 grayscale"
+            }`}
           />
           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-bg/70 to-transparent p-4">
             <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-ink-muted">
