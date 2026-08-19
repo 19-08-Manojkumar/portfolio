@@ -10,6 +10,8 @@ export type SelectedTech = {
   projects: string[];
   role: string;
   period: string;
+  projectCountLabel: string;
+  experienceNote?: string;
 };
 
 function TechExperiencePanel({ detail }: { detail: SelectedTech }) {
@@ -35,6 +37,18 @@ function TechExperiencePanel({ detail }: { detail: SelectedTech }) {
         <div className="mt-3 border-t border-border pt-3">
           <p className="text-[11px] leading-relaxed text-ink">{detail.role}</p>
           <p className="font-mono mt-1 text-[9px] text-ink-faint">{detail.period}</p>
+        </div>
+
+        <div className="mt-3 rounded-xl border border-border bg-surface/70 px-3 py-2">
+          <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-accent-soft">
+            Project footprint
+          </p>
+          <p className="font-display mt-1 text-lg font-semibold text-ink">
+            {detail.projectCountLabel} projects
+          </p>
+          {detail.experienceNote && (
+            <p className="mt-1 text-[10px] leading-snug text-ink-muted">{detail.experienceNote}</p>
+          )}
         </div>
 
         <div className="mt-3 space-y-1.5">

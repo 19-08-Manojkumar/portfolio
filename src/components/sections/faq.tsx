@@ -11,11 +11,11 @@ const faqs = [
   },
   {
     q: "Do you work with existing codebases, or only greenfield projects?",
-    a: "Mostly existing, production codebases — that's been the bulk of my experience at Bytize: extending live systems, restructuring service layers, and shipping features without breaking what's already running.",
+    a: "Mostly existing, production codebases — that has been the bulk of my experience at Bytize: extending live ERP and product systems, restructuring service layers, and shipping features without breaking what teams already rely on.",
   },
   {
     q: "What does your typical stack look like?",
-    a: "React or Next.js on the frontend, NestJS or Express on the backend, MongoDB or MySQL for data, TypeScript throughout, and JWT/RBAC for auth. I'm pragmatic about swapping pieces when a project calls for it.",
+    a: "React in 6+ projects, Next.js and Node.js in 8+, NestJS in 6+, TypeScript in 10+, MongoDB in 12+, and MySQL in 10+. My usual setup is React or Next.js on the frontend, NestJS or Express on the backend, with TypeScript and JWT/RBAC where the product calls for it.",
   },
   {
     q: "Are you open to remote work?",

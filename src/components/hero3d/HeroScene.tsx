@@ -4,7 +4,7 @@ import { memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } fro
 import { AdaptiveDpr, Preload } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
-import { experience, ownProjects, skillGroups, stackLogos } from "@/lib/data";
+import { experience, ownProjects, skillGroups, stackLogos, techProjectFootprint } from "@/lib/data";
 import CameraRig from "./CameraRig";
 import Effects from "./Effects";
 import FloatingTechIcons from "./FloatingTechIcons";
@@ -49,6 +49,10 @@ function isMatchingTech(iconName: string, technology: string) {
   return candidate === icon || candidate.startsWith(icon) || icon.startsWith(candidate);
 }
 
+const TECH_FOOTPRINT = new Map(
+  Object.entries(techProjectFootprint).map(([name, value]) => [normalizeTech(name), value])
+);
+
 function buildTechDetails(): SelectedTech[] {
   const projects = [...experience.projects, ...ownProjects];
 
@@ -59,6 +63,7 @@ function buildTechDetails(): SelectedTech[] {
     const skillArea = skillGroups.find((group) =>
       group.skills.some((technology) => isMatchingTech(icon.name, technology))
     );
+    const footprint = TECH_FOOTPRINT.get(normalizeTech(icon.name));
 
     return {
       ...icon,
@@ -66,6 +71,8 @@ function buildTechDetails(): SelectedTech[] {
       projects: relatedProjects,
       role: experience.role,
       period: experience.period,
+      projectCountLabel: footprint?.label ?? `${relatedProjects.length}`,
+      experienceNote: footprint?.note,
     };
   });
 }
@@ -171,7 +178,7 @@ function HeroScene() {
       {!compact && selectedTech && <TechExperiencePanel detail={selectedTech} />}
       <span className="sr-only" aria-live="polite">
         {selectedTech
-          ? `${selectedTech.name}. ${selectedTech.area}. Related projects: ${selectedTech.projects.join(
+          ? `${selectedTech.name}. ${selectedTech.area}. ${selectedTech.projectCountLabel} shipped projects. Related projects: ${selectedTech.projects.join(
               ", "
             ) || "core portfolio capability"}.`
           : "No technology selected."}

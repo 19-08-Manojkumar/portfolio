@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { stats, profile } from "@/lib/data";
+import { careerTimeline, profile, stats } from "@/lib/data";
 import { useTilt } from "@/hooks/use-tilt";
 import ParallaxTexture from "@/components/layout/parallax-texture";
 import {
@@ -33,38 +33,13 @@ const statIcons: Record<string, LucideIcon> = {
   gauge: Gauge,
 };
 
-const timeline: { year: string; title: string; detail: string; icon: LucideIcon }[] = [
-  {
-    year: "2019",
-    title: "Started B.E. in Electrical & Electronics",
-    detail: "Anjalai Ammal Mahalingam Engineering College — where curiosity for how systems work took root.",
-    icon: GraduationCap,
-  },
-  {
-    year: "2022",
-    title: "First lines of full-stack code",
-    detail: "Taught myself the MERN stack alongside coursework, building small CRUD apps to understand the full request lifecycle.",
-    icon: Code2,
-  },
-  {
-    year: "2023",
-    title: "Graduated, CGPA 8.02",
-    detail: "Wrapped up my engineering degree and pivoted fully into software development.",
-    icon: Award,
-  },
-  {
-    year: "2024",
-    title: "Joined Bytize Technology Solutions",
-    detail: "Started building production systems: e-commerce platforms, enterprise CLM tooling, and CRM systems at scale.",
-    icon: Briefcase,
-  },
-  {
-    year: "Now",
-    title: "Full Stack Developer, 2+ years in",
-    detail: "Shipping structured NestJS backends and performant Next.js frontends — with an eye on architecture, not just features.",
-    icon: Rocket,
-  },
-];
+const timelineIcons: Record<string, LucideIcon> = {
+  graduation: GraduationCap,
+  code: Code2,
+  award: Award,
+  briefcase: Briefcase,
+  rocket: Rocket,
+};
 
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -73,6 +48,7 @@ export default function About() {
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>(".stat-value").forEach((el) => {
         const target = Number(el.dataset.value);
+        const decimals = Number(el.dataset.decimals ?? 0);
         const obj = { val: 0 };
         gsap.to(obj, {
           val: target,
@@ -80,7 +56,8 @@ export default function About() {
           ease: "power2.out",
           scrollTrigger: { trigger: el, start: "top 85%", once: true },
           onUpdate: () => {
-            el.textContent = Math.floor(obj.val).toString();
+            el.textContent =
+              decimals > 0 ? obj.val.toFixed(decimals) : Math.floor(obj.val).toString();
           },
         });
       });
@@ -156,8 +133,9 @@ export default function About() {
           <p className="max-w-2xl text-lg leading-relaxed text-ink-muted">
             I&apos;m Manojkumar, based in Chennai, India. I care about the parts of
             software most people skip past — the schema design, the retry logic, the
-            auth guard that quietly prevents a bad day. Two years in, I&apos;ve shipped
-            systems that real businesses depend on daily.
+            auth guard that quietly prevents a bad day. Over 2.5+ years, I&apos;ve
+            shipped 7+ ERP, commerce, and CRM projects used by 2K+ merchants and
+            backed by millions of customer records.
           </p>
 
           <AboutPortrait />
@@ -170,7 +148,11 @@ export default function About() {
             <div key={stat.label} className="stat-card card-border rounded-2xl bg-surface/40 p-6">
               <Icon className="mb-3 h-5 w-5 text-accent" />
               <div className="font-display text-3xl font-semibold text-ink md:text-4xl">
-                <span className="stat-value" data-value={stat.value}>
+                <span
+                  className="stat-value"
+                  data-value={stat.value}
+                  data-decimals={stat.decimals ?? 0}
+                >
                   0
                 </span>
                 <span className="text-accent">{stat.suffix}</span>
@@ -188,32 +170,35 @@ export default function About() {
           </div>
 
           <div className="space-y-16 md:space-y-24">
-            {timeline.map((item, i) => (
-              <div
-                key={item.year}
-                className={`timeline-item relative flex flex-col gap-4 md:w-1/2 ${
-                  i % 2 === 0 ? "md:pr-16 md:text-right" : "md:ml-auto md:pl-16"
-                }`}
-              >
+            {careerTimeline.map((item, i) => {
+              const Icon = timelineIcons[item.icon] ?? Rocket;
+              return (
                 <div
-                  className={`absolute top-0 hidden h-7 w-7 items-center justify-center rounded-full border border-accent bg-bg text-accent md:flex ${
-                    i % 2 === 0 ? "-right-3.5" : "-left-3.5"
+                  key={`${item.year}-${item.title}`}
+                  className={`timeline-item relative flex flex-col gap-4 md:w-1/2 ${
+                    i % 2 === 0 ? "md:pr-16 md:text-right" : "md:ml-auto md:pl-16"
                   }`}
                 >
-                  <item.icon className="h-3.5 w-3.5" />
+                  <div
+                    className={`absolute top-0 hidden h-7 w-7 items-center justify-center rounded-full border border-accent bg-bg text-accent md:flex ${
+                      i % 2 === 0 ? "-right-3.5" : "-left-3.5"
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                  </div>
+                  <span
+                    className={`flex items-center gap-1.5 font-mono text-sm text-accent ${
+                      i % 2 === 0 ? "md:justify-end" : ""
+                    }`}
+                  >
+                    <Icon className="h-3.5 w-3.5 md:hidden" />
+                    {item.year}
+                  </span>
+                  <h3 className="font-display text-xl font-medium">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-ink-muted">{item.detail}</p>
                 </div>
-                <span
-                  className={`flex items-center gap-1.5 font-mono text-sm text-accent ${
-                    i % 2 === 0 ? "md:justify-end" : ""
-                  }`}
-                >
-                  <item.icon className="h-3.5 w-3.5 md:hidden" />
-                  {item.year}
-                </span>
-                <h3 className="font-display text-xl font-medium">{item.title}</h3>
-                <p className="text-sm leading-relaxed text-ink-muted">{item.detail}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

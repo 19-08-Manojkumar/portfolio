@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s — Manojkumar",
   },
   description:
-    "Full Stack Developer building scalable web applications with React, Next.js, Node.js and NestJS. 2+ years shipping e-commerce platforms, enterprise CLM systems and CRM tooling.",
+    "Full Stack Developer with 2.5+ years of experience shipping 7+ ERP, commerce, CLM, and CRM products using React, Next.js, Node.js, NestJS, and TypeScript.",
   keywords: [
     "Manojkumar",
     "Full Stack Developer",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Manojkumar — Full Stack Developer",
     description:
-      "Full Stack Developer building scalable web applications with React, Next.js, Node.js and NestJS.",
+      "Full Stack Developer with 2.5+ years of experience shipping ERP, commerce, CLM, and CRM products with React, Next.js, Node.js, NestJS, and TypeScript.",
     url: siteUrl,
     siteName: "Manojkumar",
     type: "website",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Manojkumar — Full Stack Developer",
     description:
-      "Full Stack Developer building scalable web applications with React, Next.js, Node.js and NestJS.",
+      "Full Stack Developer with 2.5+ years of experience shipping ERP, commerce, CLM, and CRM products with React, Next.js, Node.js, NestJS, and TypeScript.",
   },
   robots: { index: true, follow: true },
   icons: {
