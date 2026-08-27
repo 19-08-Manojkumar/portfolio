@@ -39,13 +39,16 @@ export default function HeroBackground() {
             fill
             priority={i === 0}
             sizes="100vw"
-            className="object-cover brightness-[2.1] contrast-110 saturate-[1.15] transition-opacity duration-[1800ms] ease-out"
-            style={{ opacity: i === active ? 1 : 0 }}
+            className="object-cover transition-opacity duration-[1800ms] ease-out"
+            style={{
+              opacity: i === active ? 1 : 0,
+              filter: "var(--hero-image-filter)",
+            }}
           />
         ))}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-bg via-bg/60 to-bg/20" />
-      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg to-transparent" />
+      <div className="absolute inset-0" style={{ background: "var(--hero-overlay-main)" }} />
+      <div className="absolute inset-x-0 bottom-0 h-1/3" style={{ background: "var(--hero-overlay-bottom)" }} />
     </div>
   );
 }

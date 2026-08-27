@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
@@ -79,6 +79,11 @@ export default function Skills() {
   const stage = useMemo(() => sectionStage(scrollProgress), [scrollProgress]);
   const totalTools = stackGalaxyGroups.reduce((sum, group) => sum + group.tools.length, 0);
   const sharedPanelHeight = "h-[36rem] sm:h-[40rem] lg:h-[46rem]";
+  const mainPanelBeamStyle = {
+    "--beam-radius": "1.9rem",
+    "--beam-delay": "0.55s",
+    "--beam-size": "5.5rem",
+  } as CSSProperties;
 
   const openGroup = (groupId: string) => {
     setActiveGroupId(groupId);
@@ -109,17 +114,22 @@ export default function Skills() {
     <section id="stack" ref={sectionRef} className="relative isolate overflow-hidden px-6 py-32">
       <ParallaxTexture src="/accents/blueprint.avif" opacity={0.9} targetRef={sectionRef} />
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(83,134,255,0.16),transparent_26%),radial-gradient(circle_at_72%_20%,rgba(217,138,75,0.18),transparent_25%),radial-gradient(circle_at_52%_62%,rgba(127,220,192,0.12),transparent_22%),linear-gradient(180deg,rgba(4,7,12,0.94),rgba(7,8,11,0.98))]" />
+        <div className="absolute inset-0" style={{ background: "var(--skills-backdrop)" }} />
         <div
           className="absolute inset-0 opacity-55"
           style={{
-            backgroundImage:
-              "radial-gradient(rgba(240,177,132,0.26) 0.8px, transparent 0.8px)",
+            backgroundImage: "radial-gradient(var(--skills-dot-color) 0.8px, transparent 0.8px)",
             backgroundSize: "18px 18px",
           }}
         />
-        <div className="absolute left-[-8%] top-[12%] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(83,134,255,0.18),transparent_68%)] blur-3xl" />
-        <div className="absolute right-[-9%] top-[10%] h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(217,138,75,0.16),transparent_72%)] blur-3xl" />
+        <div
+          className="absolute left-[-8%] top-[12%] h-[28rem] w-[28rem] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--skills-blue-glow), transparent 68%)" }}
+        />
+        <div
+          className="absolute right-[-9%] top-[10%] h-[26rem] w-[26rem] rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, var(--skills-accent-glow), transparent 72%)" }}
+        />
       </div>
       <div className="mx-auto max-w-6xl">
         <SectionHeading eyebrow="Tech Stack" title="Tools I reach for when it matters." icon={Layers} />
@@ -151,7 +161,14 @@ export default function Skills() {
           </div>
 
           <div className={`relative z-10 lg:sticky lg:top-24 ${sharedPanelHeight}`}>
-            <div className={`flex ${sharedPanelHeight} flex-col overflow-hidden rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(8,9,11,0.82),rgba(8,9,11,0.95))] p-6 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl`}>
+            <div
+              className={`beam-border flex ${sharedPanelHeight} flex-col overflow-hidden rounded-[1.9rem] border border-border p-6 backdrop-blur-xl`}
+              style={{
+                ...mainPanelBeamStyle,
+                background: "var(--skills-panel-bg)",
+                boxShadow: "var(--theme-elevated-shadow)",
+              }}
+            >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-soft">
@@ -187,7 +204,7 @@ export default function Skills() {
               </p>
 
               <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                <div className="rounded-2xl border border-white/8 bg-surface/70 p-4">
+                <div className="rounded-2xl border border-border bg-surface/70 p-4">
                   <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-ink-faint">
                     Projects
                   </p>
@@ -199,7 +216,7 @@ export default function Skills() {
                         : stackOverview.totalProjectsLabel}
                   </p>
                 </div>
-                <div className="rounded-2xl border border-white/8 bg-surface/70 p-4">
+                <div className="rounded-2xl border border-border bg-surface/70 p-4">
                   <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-ink-faint">
                     Planets
                   </p>
@@ -216,7 +233,7 @@ export default function Skills() {
               <div
                 ref={relatedWorkRef}
                 onWheelCapture={trapPanelScroll}
-                className="mt-5 min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-[1.5rem] border border-white/8 bg-surface/72 p-4"
+                className="mt-5 min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-[1.5rem] border border-border bg-surface/72 p-4"
               >
                 <div className="flex items-center gap-2 text-accent">
                   <Telescope className="h-4 w-4" />
@@ -237,7 +254,7 @@ export default function Skills() {
                         type="button"
                         data-cursor-hover
                         onClick={() => openGroup(group.id)}
-                        className="flex w-full items-start justify-between rounded-2xl border border-white/8 bg-bg/45 px-4 py-3 text-left transition-colors hover:border-white/14 hover:bg-bg/60"
+                        className="flex w-full items-start justify-between rounded-2xl border border-border bg-bg/45 px-4 py-3 text-left transition-colors hover:border-border-strong hover:bg-bg/60"
                       >
                         <div>
                           <p className="font-display text-base font-medium text-ink">
@@ -263,7 +280,7 @@ export default function Skills() {
                         type="button"
                         data-cursor-hover
                         onClick={() => setSelectedToolId(tool.id)}
-                        className="flex items-center gap-2 rounded-full border border-white/8 bg-bg/45 px-3 py-2 text-sm text-ink-muted transition-colors hover:border-white/14 hover:text-ink"
+                        className="flex items-center gap-2 rounded-full border border-border bg-bg/45 px-3 py-2 text-sm text-ink-muted transition-colors hover:border-border-strong hover:text-ink"
                       >
                         {tool.logo ? (
                           <Image
@@ -286,9 +303,9 @@ export default function Skills() {
 
                 {selectedTool && (
                   <div className="mt-4 space-y-3">
-                    <div className="flex items-center gap-3 rounded-2xl border border-white/8 bg-bg/45 px-4 py-3">
+                    <div className="flex items-center gap-3 rounded-2xl border border-border bg-bg/45 px-4 py-3">
                       {selectedTool.logo ? (
-                        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/8 bg-surface">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface">
                           <Image
                             src={selectedTool.logo}
                             alt=""
@@ -298,7 +315,7 @@ export default function Skills() {
                           />
                         </span>
                       ) : (
-                        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/8 bg-surface font-mono text-xs text-accent">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface font-mono text-xs text-accent">
                           {selectedTool.shortName.slice(0, 3).toUpperCase()}
                         </span>
                       )}
@@ -313,7 +330,7 @@ export default function Skills() {
                     </div>
 
                     {selectedTool.experienceNote && (
-                      <p className="rounded-2xl border border-white/8 bg-bg/45 px-4 py-3 text-sm leading-relaxed text-ink-muted">
+                      <p className="rounded-2xl border border-border bg-bg/45 px-4 py-3 text-sm leading-relaxed text-ink-muted">
                         {selectedTool.experienceNote}
                       </p>
                     )}
@@ -334,7 +351,7 @@ export default function Skills() {
                 )}
               </div>
 
-              <div className="mt-5 rounded-[1.4rem] border border-white/8 bg-surface/60 p-4">
+              <div className="mt-5 rounded-[1.4rem] border border-border bg-surface/60 p-4">
                 <div className="flex items-center gap-3 text-accent-soft">
                   <Orbit className="h-4 w-4" />
                   <p className="font-mono text-[10px] uppercase tracking-[0.26em]">

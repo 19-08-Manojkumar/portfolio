@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -142,10 +142,18 @@ export default function About() {
         </div>
 
         <div className="mt-20 grid grid-cols-2 gap-8 md:grid-cols-3 lg:grid-cols-6">
-          {stats.map((stat) => {
+          {stats.map((stat, index) => {
             const Icon = statIcons[stat.icon] ?? Rocket;
+            const beamStyle = {
+              "--stat-beam-delay": `${index * 0.55}s`,
+            } as CSSProperties;
+
             return (
-            <div key={stat.label} className="stat-card card-border rounded-2xl bg-surface/40 p-6">
+            <div
+              key={stat.label}
+              className="stat-card stat-card-border card-border rounded-2xl bg-surface/40 p-6"
+              style={beamStyle}
+            >
               <Icon className="mb-3 h-5 w-5 text-accent" />
               <div className="font-display text-3xl font-semibold text-ink md:text-4xl">
                 <span
@@ -241,8 +249,8 @@ function AboutPortrait() {
       <div
         ref={tiltRef}
         data-cursor-hover
-        className="glass relative aspect-square w-full overflow-hidden rounded-[2rem] p-1"
-        style={{ transformStyle: "preserve-3d" }}
+        className="beam-border glass relative aspect-square w-full overflow-hidden rounded-[2rem] p-1"
+        style={{ transformStyle: "preserve-3d", ["--beam-radius" as string]: "2rem", ["--beam-delay" as string]: "0.2s" }}
       >
         <div className="relative h-full w-full overflow-hidden rounded-[1.75rem] bg-surface-2">
           <Image

@@ -6,7 +6,10 @@ import { Canvas, useFrame, useThree, type ThreeEvent } from "@react-three/fiber"
 import * as THREE from "three";
 import Effects from "@/components/hero3d/Effects";
 import Lighting from "@/components/hero3d/Lighting";
+import { getScenePalette } from "@/lib/theme";
 import type { StackGalaxyGroup } from "@/lib/stack-galaxy";
+
+type ScenePalette = ReturnType<typeof getScenePalette>;
 
 function useScenePreferences() {
   const [preferences, setPreferences] = useState({ compact: false, reduceMotion: false });
@@ -104,6 +107,7 @@ function StackGalaxyScene({
   onResetGroup: () => void;
 }) {
   const { compact, reduceMotion } = useScenePreferences();
+  const palette = getScenePalette("dark");
 
   return (
     <div
@@ -132,6 +136,7 @@ function StackGalaxyScene({
           <SceneContent
             compact={compact}
             motion={reduceMotion ? 0 : 1}
+            palette={palette}
             groups={groups}
             progress={progress}
             direction={direction}
@@ -151,6 +156,7 @@ function StackGalaxyScene({
 function SceneContent({
   compact,
   motion,
+  palette,
   groups,
   progress,
   direction,
@@ -163,6 +169,7 @@ function SceneContent({
 }: {
   compact: boolean;
   motion: number;
+  palette: ScenePalette;
   groups: StackGalaxyGroup[];
   progress: number;
   direction: 1 | -1;
@@ -228,7 +235,7 @@ function SceneContent({
 
   return (
     <>
-      <Lighting compact={compact} motion={motion} />
+      <Lighting compact={compact} motion={motion} showGroundShadow={false} />
       <group>
         <mesh
           position={[0, 0, -5]}
@@ -246,6 +253,7 @@ function SceneContent({
           <GalaxyDust
             compact={compact}
             motion={motion}
+            palette={palette}
             direction={direction}
             systemMix={systemMix}
             focusMix={focusMix}
@@ -260,6 +268,7 @@ function SceneContent({
                 index={index}
                 compact={compact}
                 motion={motion}
+                palette={palette}
                 direction={direction}
                 systemMix={systemMix}
                 focusMix={focusMix}
@@ -273,6 +282,7 @@ function SceneContent({
             <ToolSolarSystem
               compact={compact}
               motion={motion}
+              palette={palette}
               direction={direction}
               group={activeGroup}
               fitRadius={fitRadius}
@@ -292,6 +302,7 @@ function SceneContent({
 function GalaxyDust({
   compact,
   motion,
+  palette,
   direction,
   systemMix,
   focusMix,
@@ -299,6 +310,7 @@ function GalaxyDust({
 }: {
   compact: boolean;
   motion: number;
+  palette: ScenePalette;
   direction: 1 | -1;
   systemMix: number;
   focusMix: number;
@@ -357,7 +369,7 @@ function GalaxyDust({
         </bufferGeometry>
         <pointsMaterial
           ref={material}
-          color="#f0b184"
+          color={palette.accentSoft}
           size={compact ? 0.026 : 0.03}
           sizeAttenuation
           transparent
@@ -370,7 +382,7 @@ function GalaxyDust({
       <mesh scale={isolated ? [1.18, 0.26, 0.48] : [0.78, 0.2, 0.36]}>
         <sphereGeometry args={[1.18, 32, 32]} />
         <meshBasicMaterial
-          color="#f4c49d"
+          color={palette.accentSoft}
           transparent
           opacity={isolated ? 0.14 : 0.24}
           blending={THREE.AdditiveBlending}
@@ -386,6 +398,7 @@ function ClusterSystem({
   index,
   compact,
   motion,
+  palette,
   direction,
   systemMix,
   focusMix,
@@ -397,6 +410,7 @@ function ClusterSystem({
   index: number;
   compact: boolean;
   motion: number;
+  palette: ScenePalette;
   direction: 1 | -1;
   systemMix: number;
   focusMix: number;
@@ -448,17 +462,29 @@ function ClusterSystem({
     }
   });
 
+  const selectGroup = (event: ThreeEvent<PointerEvent | MouseEvent>) => {
+    event.stopPropagation();
+    onSelectGroup(group.id);
+  };
+
   return (
     <group ref={cluster}>
       <mesh
-        onClick={(event) => {
-          event.stopPropagation();
-          if (event.delta <= 4) onSelectGroup(group.id);
-        }}
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={selectGroup}
+        scale={compact ? 2.25 : 2.5}
+      >
+        <sphereGeometry args={[0.28, 20, 20]} />
+        <meshBasicMaterial transparent opacity={0} depthWrite={false} colorWrite={false} />
+      </mesh>
+
+      <mesh
+        onPointerDown={(event) => event.stopPropagation()}
+        onClick={selectGroup}
       >
         <sphereGeometry args={[0.22, compact ? 18 : 26, compact ? 18 : 26]} />
         <meshPhysicalMaterial
-          color="#121417"
+          color={palette.surface}
           emissive={group.accent}
           emissiveIntensity={expanded ? 1.2 : active ? 0.78 : 0.36}
           metalness={0.36}
@@ -495,7 +521,7 @@ function ClusterSystem({
         <Text
           position={[0, 0.52, 0]}
           fontSize={compact ? 0.115 : 0.145}
-          color={expanded || active ? "#f3f2ee" : "#b8bbc0"}
+          color={expanded || active ? palette.text : palette.textMuted}
           anchorX="center"
           anchorY="middle"
           maxWidth={1.8}
@@ -510,6 +536,7 @@ function ClusterSystem({
 function ToolSolarSystem({
   compact,
   motion,
+  palette,
   direction,
   group,
   fitRadius,
@@ -518,6 +545,7 @@ function ToolSolarSystem({
 }: {
   compact: boolean;
   motion: number;
+  palette: ScenePalette;
   direction: 1 | -1;
   group: StackGalaxyGroup;
   fitRadius: number;
@@ -582,6 +610,12 @@ function ToolSolarSystem({
     activePointer.current = null;
     const target = event.target as Element;
     if (target.hasPointerCapture(event.pointerId)) target.releasePointerCapture(event.pointerId);
+  };
+
+  const selectTool = (toolId: string) => (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    if (event.delta > 6) return;
+    onSelectTool(toolId);
   };
 
   useFrame(({ clock }, delta) => {
@@ -664,7 +698,7 @@ function ToolSolarSystem({
           <mesh castShadow receiveShadow>
             <sphereGeometry args={[0.76, compact ? 38 : 58, compact ? 32 : 52]} />
             <meshPhysicalMaterial
-              color="#121417"
+              color={palette.surface}
               emissive={group.accent}
               emissiveIntensity={0.34}
               metalness={0.62}
@@ -755,17 +789,20 @@ function ToolSolarSystem({
                 ref={(node) => {
                   toolRefs.current[index] = node;
                 }}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  if (event.delta <= 4) onSelectTool(tool.id);
-                }}
+                onPointerDown={(event) => event.stopPropagation()}
+                onClick={selectTool(tool.id)}
               >
                 <Billboard follow>
+                  <mesh scale={planetBubbleScale(tool.size, compact) * 1.75}>
+                    <circleGeometry args={[1, 32]} />
+                    <meshBasicMaterial transparent opacity={0} depthWrite={false} colorWrite={false} />
+                  </mesh>
+
                   <mesh scale={planetBubbleScale(tool.size, compact)}>
                     <circleGeometry args={[1, 32]} />
                     <meshPhysicalMaterial
-                      color={selectedToolId === tool.id ? "#2b1b10" : "#121417"}
-                      emissive="#d98a4b"
+                      color={selectedToolId === tool.id ? palette.selectedSurface : palette.surface}
+                      emissive={palette.accent}
                       emissiveIntensity={selectedToolId === tool.id ? 0.28 : 0.04}
                       metalness={0.35}
                       roughness={0.32}
@@ -790,7 +827,7 @@ function ToolSolarSystem({
                     <Text
                       position={[0, 0, 0.03]}
                       fontSize={planetFallbackFontSize(tool.size, compact)}
-                      color="#f3f2ee"
+                      color={palette.text}
                       anchorX="center"
                       anchorY="middle"
                       maxWidth={1.5}
@@ -803,7 +840,7 @@ function ToolSolarSystem({
                     <Text
                       position={[0, planetLabelOffset(tool.size, compact), 0]}
                       fontSize={compact ? 0.075 : 0.09}
-                      color="#f3f2ee"
+                      color={palette.text}
                       anchorX="center"
                       anchorY="middle"
                       maxWidth={2.4}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { THEME_CHANGE_EVENT } from "@/lib/theme";
 
 type Particle = {
   x: number;
@@ -24,6 +25,15 @@ export default function ParticleField() {
     let width = (canvas.width = canvas.offsetWidth);
     let height = (canvas.height = canvas.offsetHeight);
     let mouse = { x: width / 2, y: height / 2 };
+    let particleRgb = "217, 138, 75";
+
+    const updateParticleColor = () => {
+      particleRgb =
+        getComputedStyle(document.documentElement).getPropertyValue("--particle-rgb").trim() ||
+        "217, 138, 75";
+    };
+
+    updateParticleColor();
 
     const COUNT = Math.min(70, Math.floor((width * height) / 22000));
     const particles: Particle[] = Array.from({ length: COUNT }, () => ({
@@ -50,7 +60,7 @@ export default function ParticleField() {
 
         ctx.beginPath();
         ctx.arc(p.x + dx * 60, p.y + dy * 60, p.z * 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(217, 138, 75, ${0.15 + p.z * 0.35})`;
+        ctx.fillStyle = `rgba(${particleRgb}, ${0.15 + p.z * 0.35})`;
         ctx.fill();
       }
       raf = requestAnimationFrame(render);
@@ -65,13 +75,21 @@ export default function ParticleField() {
       const rect = canvas.getBoundingClientRect();
       mouse = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
+    const observer = new MutationObserver(updateParticleColor);
     window.addEventListener("resize", onResize);
     window.addEventListener("mousemove", onMove);
+    window.addEventListener(THEME_CHANGE_EVENT, updateParticleColor);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
       window.removeEventListener("mousemove", onMove);
+      window.removeEventListener(THEME_CHANGE_EVENT, updateParticleColor);
+      observer.disconnect();
     };
   }, []);
 

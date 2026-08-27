@@ -19,8 +19,13 @@ function TechExperiencePanel({ detail }: { detail: SelectedTech }) {
     <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 w-[13.5rem] -translate-x-1/2 -translate-y-1/2">
       <div
         key={detail.name}
-        className="rounded-2xl border border-accent/50 bg-bg/95 p-4 text-left shadow-[0_18px_70px_rgba(0,0,0,0.75)] backdrop-blur-xl"
-        style={{ animation: "techPanelIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both" }}
+        className="beam-border beam-radius-2xl rounded-2xl border border-accent/50 bg-bg/95 p-4 text-left shadow-[0_18px_70px_rgba(0,0,0,0.75)] backdrop-blur-xl"
+        style={{
+          animation: "techPanelIn 300ms cubic-bezier(0.16, 1, 0.3, 1) both",
+          ["--beam-delay" as string]: "0.35s",
+          ["--beam-size" as string]: "4.25rem",
+          boxShadow: "var(--theme-floating-shadow)",
+        }}
       >
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border-strong bg-surface shadow-inner">

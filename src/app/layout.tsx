@@ -4,6 +4,8 @@ import "./globals.css";
 import SmoothScroll from "@/components/layout/smooth-scroll";
 import CustomCursor from "@/components/layout/custom-cursor";
 import GrainOverlay from "@/components/layout/grain-overlay";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -24,6 +26,19 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 const siteUrl = "https://manojkumar-dev.vercel.app";
+const themeInitScript = `
+  try {
+    const storedTheme = localStorage.getItem("${THEME_STORAGE_KEY}");
+    const theme = storedTheme === "light" ? "light" : "dark";
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    document.documentElement.classList.add("theme-ready");
+  } catch {
+    document.documentElement.dataset.theme = "dark";
+    document.documentElement.style.colorScheme = "dark";
+    document.documentElement.classList.add("theme-ready");
+  }
+`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -77,12 +92,19 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${jakarta.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      data-theme="dark"
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-bg text-ink">
-        <SmoothScroll />
-        <CustomCursor />
-        <GrainOverlay />
-        {children}
+        <ThemeProvider>
+          <SmoothScroll />
+          <CustomCursor />
+          <GrainOverlay />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

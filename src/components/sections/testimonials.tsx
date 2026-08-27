@@ -28,7 +28,11 @@ export default function Testimonials() {
 
         <div className="mt-16 grid gap-6 md:grid-cols-2">
           {testimonials.map((t) => (
-            <div key={t.name} className="glass flex flex-col gap-6 rounded-2xl p-8">
+            <div
+              key={t.name}
+              className="beam-border beam-radius-2xl glass flex flex-col gap-6 rounded-2xl p-8"
+              style={{ ["--beam-delay" as string]: "0.4s" }}
+            >
               <Quote className="h-6 w-6 text-accent" />
               <p className="text-base leading-relaxed text-ink-muted">&ldquo;{t.quote}&rdquo;</p>
               <div className="mt-auto flex items-center gap-3">

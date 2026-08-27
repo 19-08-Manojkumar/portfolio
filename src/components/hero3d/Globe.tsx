@@ -3,16 +3,15 @@
 import { memo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-
-const ACCENT = "#d98a4b";
-const ACCENT_SOFT = "#f0b184";
-const JADE = "#7fdcc0";
-const SURFACE = "#121417";
+import { useTheme } from "@/components/theme/theme-provider";
+import { getScenePalette } from "@/lib/theme";
 
 function Globe({ compact, motion }: { compact: boolean; motion: number }) {
   const globe = useRef<THREE.Group>(null);
   const haloMaterial = useRef<THREE.MeshBasicMaterial>(null);
   const reflection = useRef<THREE.Group>(null);
+  const { theme } = useTheme();
+  const palette = getScenePalette(theme);
 
   useFrame(({ clock }, delta) => {
     if (globe.current) {
@@ -34,8 +33,8 @@ function Globe({ compact, motion }: { compact: boolean; motion: number }) {
         <mesh castShadow receiveShadow>
           <sphereGeometry args={[1.55, compact ? 48 : 96, compact ? 32 : 64]} />
           <meshPhysicalMaterial
-            color={SURFACE}
-            emissive={ACCENT}
+            color={palette.surface}
+            emissive={palette.accent}
             emissiveIntensity={0.075}
             metalness={0.72}
             roughness={0.2}
@@ -48,7 +47,7 @@ function Globe({ compact, motion }: { compact: boolean; motion: number }) {
         <mesh scale={1.006}>
           <icosahedronGeometry args={[1.55, compact ? 3 : 5]} />
           <meshBasicMaterial
-            color={ACCENT_SOFT}
+            color={palette.accentSoft}
             transparent
             opacity={compact ? 0.055 : 0.075}
             wireframe
@@ -59,8 +58,8 @@ function Globe({ compact, motion }: { compact: boolean; motion: number }) {
         <mesh scale={0.985}>
           <sphereGeometry args={[1.55, 48, 32]} />
           <meshStandardMaterial
-            color={JADE}
-            emissive={JADE}
+            color={palette.jade}
+            emissive={palette.jade}
             emissiveIntensity={0.16}
             roughness={0.38}
             metalness={0.25}
@@ -75,7 +74,7 @@ function Globe({ compact, motion }: { compact: boolean; motion: number }) {
         <mesh>
           <torusGeometry args={[1.86, 0.012, 8, compact ? 80 : 140]} />
           <meshBasicMaterial
-            color={ACCENT_SOFT}
+            color={palette.accentSoft}
             transparent
             opacity={0.34}
             depthWrite={false}
@@ -85,7 +84,7 @@ function Globe({ compact, motion }: { compact: boolean; motion: number }) {
           <mesh rotation={[0.38, 0.9, 0.2]}>
             <torusGeometry args={[2.03, 0.006, 8, 160]} />
             <meshBasicMaterial
-              color={JADE}
+              color={palette.jade}
               transparent
               opacity={0.18}
               depthWrite={false}
@@ -98,7 +97,7 @@ function Globe({ compact, motion }: { compact: boolean; motion: number }) {
         <sphereGeometry args={[1.55, 40, 28]} />
         <meshBasicMaterial
           ref={haloMaterial}
-          color={ACCENT}
+          color={palette.accent}
           transparent
           opacity={0.055}
           side={THREE.BackSide}

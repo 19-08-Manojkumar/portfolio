@@ -4,6 +4,8 @@ import { memo, useEffect, useMemo, useRef } from "react";
 import { Billboard, Line, RoundedBox } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { useTheme } from "@/components/theme/theme-provider";
+import { getScenePalette } from "@/lib/theme";
 
 function seededValue(index: number, offset: number) {
   const value = Math.sin(index * 9283.17 + offset * 37.41) * 43758.5453;
@@ -12,6 +14,8 @@ function seededValue(index: number, offset: number) {
 
 function Terminal({ motion }: { motion: number }) {
   const group = useRef<THREE.Group>(null);
+  const { theme } = useTheme();
+  const palette = getScenePalette(theme);
 
   useFrame(({ clock }) => {
     if (!group.current) return;
@@ -24,7 +28,7 @@ function Terminal({ motion }: { motion: number }) {
       <Billboard follow>
         <RoundedBox args={[1.55, 0.98, 0.08]} radius={0.1} smoothness={3}>
           <meshPhysicalMaterial
-            color="#0e1013"
+            color={palette.surfaceStrong}
             metalness={0.38}
             roughness={0.3}
             transparent
@@ -33,18 +37,18 @@ function Terminal({ motion }: { motion: number }) {
         </RoundedBox>
         <mesh position={[0, 0.29, 0.052]}>
           <planeGeometry args={[1.37, 0.035]} />
-          <meshBasicMaterial color="#33373d" />
+          <meshBasicMaterial color={palette.textMuted} />
         </mesh>
         {[-0.52, -0.42, -0.32].map((x, index) => (
           <mesh key={x} position={[x, 0.39, 0.06]}>
             <circleGeometry args={[0.035, 12]} />
-            <meshBasicMaterial color={index === 0 ? "#d98a4b" : "#6e7075"} />
+            <meshBasicMaterial color={index === 0 ? palette.accent : palette.textMuted} />
           </mesh>
         ))}
         {[
-          [-0.32, 0.1, 0.52, "#7fdcc0"],
-          [-0.19, -0.08, 0.78, "#d98a4b"],
-          [-0.36, -0.26, 0.42, "#a599e9"],
+          [-0.32, 0.1, 0.52, palette.jade],
+          [-0.19, -0.08, 0.78, palette.accent],
+          [-0.36, -0.26, 0.42, palette.violet],
         ].map(([x, y, width, color]) => (
           <mesh key={`${x}-${y}`} position={[x as number, y as number, 0.06]}>
             <planeGeometry args={[width as number, 0.055]} />
@@ -58,6 +62,8 @@ function Terminal({ motion }: { motion: number }) {
 
 function CodeGlyphs({ motion }: { motion: number }) {
   const group = useRef<THREE.Group>(null);
+  const { theme } = useTheme();
+  const palette = getScenePalette(theme);
 
   useFrame(({ clock }) => {
     if (!group.current) return;
@@ -74,7 +80,7 @@ function CodeGlyphs({ motion }: { motion: number }) {
             [-0.72, 0, 0],
             [-0.35, -0.48, 0],
           ]}
-          color="#d98a4b"
+          color={palette.accent}
           lineWidth={1.6}
           transparent
           opacity={0.72}
@@ -85,7 +91,7 @@ function CodeGlyphs({ motion }: { motion: number }) {
             [0.72, 0, 0],
             [0.35, -0.48, 0],
           ]}
-          color="#f0b184"
+          color={palette.accentSoft}
           lineWidth={1.6}
           transparent
           opacity={0.72}
@@ -95,7 +101,7 @@ function CodeGlyphs({ motion }: { motion: number }) {
             [0.12, 0.6, 0],
             [-0.14, -0.6, 0],
           ]}
-          color="#7fdcc0"
+          color={palette.jade}
           lineWidth={1.15}
           transparent
           opacity={0.55}
@@ -108,6 +114,8 @@ function CodeGlyphs({ motion }: { motion: number }) {
 function Particles({ compact, motion }: { compact: boolean; motion: number }) {
   const particleGroup = useRef<THREE.Group>(null);
   const cubes = useRef<THREE.InstancedMesh>(null);
+  const { theme } = useTheme();
+  const palette = getScenePalette(theme);
   const cubeCount = compact ? 5 : 12;
   const particleCount = compact ? 45 : 110;
 
@@ -177,7 +185,7 @@ function Particles({ compact, motion }: { compact: boolean; motion: number }) {
             <bufferAttribute attach="attributes-position" args={[positions, 3]} />
           </bufferGeometry>
           <pointsMaterial
-            color="#f0b184"
+            color={palette.accentSoft}
             size={compact ? 0.018 : 0.024}
             sizeAttenuation
             transparent
@@ -191,8 +199,8 @@ function Particles({ compact, motion }: { compact: boolean; motion: number }) {
       <instancedMesh ref={cubes} args={[undefined, undefined, cubeCount]} frustumCulled={false}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial
-          color="#d98a4b"
-          emissive="#d98a4b"
+          color={palette.accent}
+          emissive={palette.accent}
           emissiveIntensity={0.18}
           metalness={0.62}
           roughness={0.3}

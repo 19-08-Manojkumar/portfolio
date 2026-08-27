@@ -133,7 +133,7 @@ export default function Hero() {
         {CODE_SNIPPETS.map((snippet, i) => (
           <span
             key={snippet}
-            className="font-mono absolute whitespace-nowrap text-xs md:text-sm text-ink-faint"
+            className="hero-copy-faint font-mono absolute whitespace-nowrap text-xs md:text-sm"
             style={{
               top: `${(i * 37) % 100}%`,
               left: `${(i * 53) % 100}%`,
@@ -152,7 +152,7 @@ export default function Hero() {
 
         <h1
           ref={nameRef}
-          className="font-display flex flex-wrap text-[15vw] font-semibold leading-[0.9] tracking-tighter sm:text-[12vw] lg:text-[9rem]"
+          className="hero-copy-text font-display flex flex-wrap text-[15vw] font-semibold leading-[0.9] tracking-tighter sm:text-[12vw] lg:text-[9rem]"
         >
           {name.map((char, i) => (
             <span key={i} className="name-char inline-block overflow-hidden">
@@ -161,12 +161,12 @@ export default function Hero() {
           ))}
         </h1>
 
-        <div className="hero-reveal mt-6 flex h-10 items-center gap-2 text-xl sm:text-2xl md:text-3xl text-ink-muted">
+        <div className="hero-reveal hero-copy-muted mt-6 flex h-10 items-center gap-2 text-xl sm:text-2xl md:text-3xl">
           <span className="font-display">{typed}</span>
           <span className="inline-block h-[1em] w-[2px] animate-pulse bg-accent" />
         </div>
 
-        <p className="hero-reveal mt-8 max-w-xl text-base leading-relaxed text-ink-muted">
+        <p className="hero-reveal hero-copy-muted mt-8 max-w-xl text-base leading-relaxed">
           {profile.summary}
         </p>
 
@@ -189,7 +189,7 @@ export default function Hero() {
       <a
         href="#about"
         data-cursor-hover
-        className="hero-reveal absolute bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-xs uppercase tracking-[0.3em] text-ink-faint"
+        className="hero-reveal hero-copy-faint absolute bottom-10 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-xs uppercase tracking-[0.3em]"
       >
         Scroll
         <span className="relative h-10 w-[1px] overflow-hidden bg-border-strong">
@@ -252,7 +252,7 @@ function MagneticButton({
       className={`flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-colors ${
         primary
           ? "bg-ink text-bg hover:bg-accent"
-          : "border border-border-strong text-ink hover:border-accent hover:text-accent"
+          : "hero-outline-button border"
       }`}
     >
       {children}

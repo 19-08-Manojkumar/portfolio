@@ -52,7 +52,10 @@ export default function HeroDevice() {
           style={{ background: "radial-gradient(circle, var(--color-accent) 0%, transparent 70%)" }}
         />
 
-        <div className="glass relative aspect-[3/2] w-full overflow-hidden rounded-2xl p-1.5 shadow-2xl shadow-black/60">
+        <div
+          className="beam-border beam-radius-2xl glass relative aspect-[3/2] w-full overflow-hidden rounded-2xl p-1.5 shadow-2xl shadow-black/60"
+          style={{ ["--beam-delay" as string]: "0.45s" }}
+        >
           <div className="relative h-full w-full overflow-hidden rounded-xl">
             <Image
               src={HERO_VISUAL_SRC}

@@ -4,6 +4,8 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Billboard, useTexture } from "@react-three/drei";
 import { useFrame, useThree, type ThreeEvent } from "@react-three/fiber";
 import * as THREE from "three";
+import { useTheme } from "@/components/theme/theme-provider";
+import { getScenePalette } from "@/lib/theme";
 
 type TechIcon = { name: string; src: string };
 
@@ -25,6 +27,8 @@ function FloatingTechIcons({
   const iconRefs = useRef<Array<THREE.Group | null>>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { gl } = useThree();
+  const { theme } = useTheme();
+  const palette = getScenePalette(theme);
   const orbitPoint = useMemo(() => new THREE.Vector3(), []);
   const orbitTilt = useMemo(() => new THREE.Euler(0.18, -0.55, 0.1), []);
 
@@ -84,8 +88,8 @@ function FloatingTechIcons({
             <mesh scale={compact ? 0.72 : 0.82}>
               <circleGeometry args={[0.42, 32]} />
               <meshPhysicalMaterial
-                color={selectedName === icon.name ? "#2b1b10" : "#121417"}
-                emissive="#d98a4b"
+                color={selectedName === icon.name ? palette.selectedSurface : palette.surface}
+                emissive={palette.accent}
                 emissiveIntensity={selectedName === icon.name ? 0.3 : 0.025}
                 metalness={0.35}
                 roughness={0.32}

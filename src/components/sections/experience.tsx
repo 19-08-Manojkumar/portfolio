@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CheckCircle2, Layers, TrendingUp, Briefcase } from "lucide-react";
@@ -101,10 +101,16 @@ export default function Experience() {
           ref={trackRef}
           className="flex flex-col gap-8 px-6 md:h-full md:w-max md:flex-row md:items-center md:gap-10 md:px-[8vw]"
         >
-          {experience.projects.map((project, i) => (
+          {experience.projects.map((project, i) => {
+            const beamStyle = {
+              "--exp-beam-delay": `${i * 0.7}s`,
+            } as CSSProperties;
+
+            return (
             <article
               key={project.name}
-              className="exp-card card-border relative flex w-full flex-shrink-0 flex-col rounded-3xl bg-surface/50 p-8 md:h-[70vh] md:w-[70vw] md:p-12 lg:w-[52vw]"
+              className="exp-card beam-border beam-radius-3xl exp-card-beam card-border relative flex w-full flex-shrink-0 flex-col rounded-3xl bg-surface/50 p-8 md:h-[70vh] md:w-[70vw] md:p-12 lg:w-[52vw]"
+              style={beamStyle}
             >
               <span className="font-mono text-xs text-ink-faint">
                 0{i + 1} / 0{experience.projects.length}
@@ -155,7 +161,8 @@ export default function Experience() {
                 )}
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

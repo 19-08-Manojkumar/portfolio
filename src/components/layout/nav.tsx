@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { User, Layers, Briefcase, FolderGit2, Send, Sparkles } from "lucide-react";
 import { profile } from "@/lib/data";
+import ThemeToggle from "@/components/layout/theme-toggle";
 
 const links = [
   { href: "#about", label: "About", icon: User },
@@ -56,14 +57,17 @@ export default function Nav() {
           ))}
         </ul>
 
-        <a
-          href="#contact"
-          className="group flex items-center gap-1.5 rounded-full border border-border-strong px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent"
-          data-cursor-hover
-        >
-          <Sparkles className="h-3.5 w-3.5" />
-          Hire Me
-        </a>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <a
+            href="#contact"
+            className="group flex items-center gap-1.5 rounded-full border border-border-strong px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent"
+            data-cursor-hover
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Hire Me
+          </a>
+        </div>
       </nav>
     </header>
   );
