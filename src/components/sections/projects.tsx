@@ -9,6 +9,8 @@ import {
   FileStack,
   UsersRound,
   GraduationCap,
+  Database,
+  ChartNoAxesCombined,
   Layers,
   FolderGit2,
   type LucideIcon,
@@ -77,7 +79,7 @@ export default function Projects() {
 
         <div className="mt-32">
           <p className="font-mono text-sm uppercase tracking-[0.3em] text-accent">
-            Own Project
+            Own Projects
           </p>
           {ownProjects.map((project) => (
             <OwnProjectRow key={project.name} project={project} />
@@ -149,6 +151,12 @@ function FeaturedProjectRow({
 
 function OwnProjectRow({ project }: { project: (typeof ownProjects)[number] }) {
   const rowRef = useRef<HTMLDivElement>(null);
+  const projectIcons = {
+    graduation: GraduationCap,
+    database: Database,
+    analytics: ChartNoAxesCombined,
+  } as const;
+  const ProjectIcon = projectIcons[project.icon];
 
   return (
     <div
@@ -157,7 +165,7 @@ function OwnProjectRow({ project }: { project: (typeof ownProjects)[number] }) {
     >
       <div>
         <h3 className="font-display flex items-center gap-2.5 text-2xl font-semibold">
-          <GraduationCap className="h-6 w-6 text-jade" />
+          <ProjectIcon className="h-6 w-6 text-jade" />
           {project.name}
         </h3>
         <p className="mt-1 text-sm text-ink-muted">{project.tagline}</p>
@@ -183,12 +191,24 @@ function OwnProjectRow({ project }: { project: (typeof ownProjects)[number] }) {
             </span>
           ))}
         </div>
+        {project.url && (
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noreferrer"
+            data-cursor-hover
+            className="group mt-7 inline-flex items-center gap-1.5 rounded-full border border-border-strong px-5 py-2.5 text-sm transition-colors hover:border-jade hover:text-jade"
+          >
+            Visit site
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        )}
       </div>
       <BrowserMockup title={project.name} tint="from-jade/15">
         {project.images?.length ? (
           <ScrollImageStack images={project.images} alt={project.name} rowRef={rowRef} />
         ) : (
-          <ProjectGlyph label={project.name} icon={GraduationCap} />
+          <ProjectGlyph label={project.name} icon={ProjectIcon} />
         )}
       </BrowserMockup>
     </div>

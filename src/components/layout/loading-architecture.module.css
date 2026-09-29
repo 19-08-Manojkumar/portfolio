@@ -1,0 +1,89 @@
+.scene {
+  width: min(1120px, 100%);
+  color: #fff;
+  filter: drop-shadow(0 0 18px rgb(255 255 255 / 0.08));
+}
+
+.line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.45;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  vector-effect: non-scaling-stroke;
+  will-change: stroke-dashoffset;
+}
+
+.guide {
+  opacity: 0.14;
+  stroke-width: 1;
+}
+
+.structure {
+  opacity: 0.88;
+}
+
+.detail {
+  opacity: 0.55;
+  stroke-width: 1.15;
+}
+
+.ground {
+  opacity: 0.72;
+  stroke-width: 1.35;
+}
+
+.atmosphere {
+  opacity: 0.46;
+  stroke-width: 1.15;
+}
+
+.water {
+  opacity: 0.24;
+  stroke-width: 1;
+}
+
+.reflection {
+  color: #fff;
+  opacity: 0.38;
+}
+
+@media (max-width: 640px) {
+  .scene {
+    width: 160%;
+    max-width: none;
+    animation: landmark-pan 4.2s linear forwards;
+  }
+
+  .line {
+    stroke-width: 1.2;
+  }
+
+  .detail {
+    stroke-width: 1;
+  }
+
+  .reflection {
+    opacity: 0.32;
+  }
+}
+
+@keyframes landmark-pan {
+  from {
+    transform: translateX(25%);
+  }
+
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: reduce) {
+  .scene {
+    width: 100%;
+    animation: none;
+    transform: none;
+  }
+}

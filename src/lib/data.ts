@@ -332,9 +332,21 @@ export const experience = {
   ] satisfies ExperienceProject[],
 };
 
-export const ownProjects = [
+export type OwnProject = {
+  name: string;
+  icon: "graduation" | "database" | "analytics";
+  tagline: string;
+  description: string;
+  bullets: string[];
+  tech: string[];
+  images?: string[];
+  url?: string;
+};
+
+export const ownProjects: OwnProject[] = [
   {
     name: "Tutorials Management System",
+    icon: "graduation",
     tagline: "Full-stack tutorial publishing platform",
     description:
       "A full-stack tutorial publishing platform built with Angular and Spring Boot, featuring role-based authentication and admin moderation workflows.",
@@ -346,6 +358,36 @@ export const ownProjects = [
     ],
     tech: ["Angular", "Spring Boot", "MySQL", "Hibernate ORM"],
     images: ["/projects/tutorials-1.avif", "/projects/tutorials-2.avif"],
+  },
+  {
+    name: "DataForge DB",
+    icon: "database",
+    tagline: "SQL and NoSQL learning platform",
+    description:
+      "A focused database learning platform that helps users build a practical understanding of relational and non-relational databases through structured, easy-to-follow content.",
+    bullets: [
+      "Organized learning content around SQL and NoSQL fundamentals.",
+      "Explains relational data, queries, document databases, and core database concepts.",
+      "Presents topic-based examples that make database concepts easier to understand.",
+      "Helps learners compare SQL and NoSQL approaches for different data needs.",
+    ],
+    tech: ["SQL", "NoSQL", "Database Design", "Data Modeling"],
+    url: "https://dataforge-db.vercel.app/",
+  },
+  {
+    name: "Data Science Forge",
+    icon: "analytics",
+    tagline: "Data science and analytics learning hub",
+    description:
+      "A learning-focused website that introduces data science and data analytics through structured content designed to make data concepts approachable and practical.",
+    bullets: [
+      "Provides guided content for data science and data analytics learners.",
+      "Introduces the data workflow from collection and preparation to analysis.",
+      "Explains how insights can be discovered, interpreted, and communicated.",
+      "Breaks complex data topics into clear, learner-friendly sections.",
+    ],
+    tech: ["Data Science", "Data Analytics", "Data Visualization", "Data Insights"],
+    url: "https://data-science-forge.vercel.app/",
   },
 ];
 
