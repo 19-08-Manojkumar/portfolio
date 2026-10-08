@@ -54,7 +54,7 @@
   .scene {
     width: 160%;
     max-width: none;
-    animation: landmark-pan 4.2s linear forwards;
+    transform: translateX(var(--landmark-pan, 25%));
   }
 
   .line {
@@ -70,20 +70,9 @@
   }
 }
 
-@keyframes landmark-pan {
-  from {
-    transform: translateX(25%);
-  }
-
-  to {
-    transform: translateX(-25%);
-  }
-}
-
 @media (max-width: 640px) and (prefers-reduced-motion: reduce) {
   .scene {
     width: 100%;
-    animation: none;
     transform: none;
   }
 }
